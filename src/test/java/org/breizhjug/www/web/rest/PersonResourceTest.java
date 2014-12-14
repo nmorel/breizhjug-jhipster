@@ -69,19 +69,19 @@ public class PersonResourceTest {
         person.setTeamMember(false);
 
         github = new Address();
-        github.setType(EnumTypeAddress.GITHUB);
+        github.setType(EnumTypeAddress.Github);
         github.setValue("john_doe");
         github.setPerson(person);
         person.getAddresses().add(github);
 
         twitter = new Address();
-        twitter.setType(EnumTypeAddress.TWITTER);
+        twitter.setType(EnumTypeAddress.Twitter);
         twitter.setValue("@johndoe");
         twitter.setPerson(person);
         person.getAddresses().add(twitter);
 
         mail = new Address();
-        mail.setType(EnumTypeAddress.MAIL);
+        mail.setType(EnumTypeAddress.Mail);
         mail.setValue("john.doe@gmail.com");
         mail.setPerson(person);
         person.getAddresses().add(mail);
@@ -143,9 +143,9 @@ public class PersonResourceTest {
             .andExpect(jsonPath("$.[0].resume").value(person.getResume()))
             .andExpect(jsonPath("$.[0].speaker").value(person.isSpeaker()))
             .andExpect(jsonPath("$.[0].teamMember").value(person.isTeamMember()))
-            .andExpect(jsonPath("$.[0].addresses[?(@.type == 'GITHUB' && @.value == 'john_doe')]").exists())
-            .andExpect(jsonPath("$.[0].addresses[?(@.type == 'TWITTER' && @.value == '@johndoe')]").exists())
-            .andExpect(jsonPath("$.[0].addresses[?(@.type == 'MAIL' && @.value == 'john.doe@gmail.com')]").exists());
+            .andExpect(jsonPath("$.[0].addresses[?(@.type == 'Github' && @.value == 'john_doe')]").exists())
+            .andExpect(jsonPath("$.[0].addresses[?(@.type == 'Twitter' && @.value == '@johndoe')]").exists())
+            .andExpect(jsonPath("$.[0].addresses[?(@.type == 'Mail' && @.value == 'john.doe@gmail.com')]").exists());
     }
 
     @Test
@@ -164,9 +164,9 @@ public class PersonResourceTest {
             .andExpect(jsonPath("$.resume").value(person.getResume()))
             .andExpect(jsonPath("$.speaker").value(person.isSpeaker()))
             .andExpect(jsonPath("$.teamMember").value(person.isTeamMember()))
-            .andExpect(jsonPath("$.addresses[?(@.type == 'GITHUB' && @.value == 'john_doe')]").exists())
-            .andExpect(jsonPath("$.addresses[?(@.type == 'TWITTER' && @.value == '@johndoe')]").exists())
-            .andExpect(jsonPath("$.addresses[?(@.type == 'MAIL' && @.value == 'john.doe@gmail.com')]").exists());
+            .andExpect(jsonPath("$.addresses[?(@.type == 'Github' && @.value == 'john_doe')]").exists())
+            .andExpect(jsonPath("$.addresses[?(@.type == 'Twitter' && @.value == '@johndoe')]").exists())
+            .andExpect(jsonPath("$.addresses[?(@.type == 'Mail' && @.value == 'john.doe@gmail.com')]").exists());
     }
 
     @Test

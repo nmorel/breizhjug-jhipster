@@ -5,6 +5,7 @@ import com.google.common.collect.ComparisonChain;
 import com.google.common.collect.Ordering;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -12,32 +13,41 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 
 /**
- * A Address.
+ * A Link.
  */
 @Entity
-@Table(name = "T_ADDRESS")
+@Table(name = "T_LINK")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Address implements Serializable, Comparable<Address> {
+public class Link implements Serializable, Comparable<Link> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NotNull
-    @Column(name = "type", nullable = false, length = 10)
-    @Enumerated(EnumType.STRING)
-    private EnumTypeAddress type;
+    @Size(max = 50)
+    @Column(name = "type", nullable = false, length = 50)
+    private String type;
 
+    @URL
     @NotNull
     @Size(max = 255)
-    @Column(name = "value", nullable = false, unique = true, length = 255)
-    private String value;
+    @Column(name = "url", nullable = false, length = 255)
+    private String url;
 
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "person_id", nullable = false)
+    @Size(max = 100)
+    @Column(name = "name", nullable = false, length = 100)
+    private String name;
+
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "event_id", nullable = false)
     @JsonBackReference
-    private Person person;
+    private Event event;
+
+    public Link() {
+    }
 
     public Long getId() {
         return id;
@@ -47,28 +57,36 @@ public class Address implements Serializable, Comparable<Address> {
         this.id = id;
     }
 
-    public EnumTypeAddress getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(EnumTypeAddress type) {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public String getValue() {
-        return value;
+    public String getUrl() {
+        return url;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
-    public Person getPerson() {
-        return person;
+    public String getName() {
+        return name;
     }
 
-    public void setPerson(Person person) {
-        this.person = person;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     @Override
@@ -80,9 +98,9 @@ public class Address implements Serializable, Comparable<Address> {
             return false;
         }
 
-        Address address = (Address) o;
+        Link link = (Link) o;
 
-        return id != null && id.equals(address.id);
+        return id != null && id.equals(link.id);
     }
 
     @Override
@@ -95,18 +113,19 @@ public class Address implements Serializable, Comparable<Address> {
 
     @Override
     public String toString() {
-        return "Address{" +
+        return "Link{" +
             "id=" + id +
             ", type='" + type + "'" +
-            ", value='" + value + "'" +
+            ", url='" + url + "'" +
+            ", name='" + name + "'" +
             '}';
     }
 
     @Override
-    public int compareTo(Address o) {
+    public int compareTo(Link o) {
         return ComparisonChain.start()
-            .compare(type.name(), o == null ? null : o.getType().name(), Ordering.natural().nullsLast())
-            .compare(value, o == null ? null : o.getValue(), Ordering.natural().nullsLast())
+            .compare(type, o == null ? null : o.getType(), Ordering.natural().nullsLast())
+            .compare(name, o == null ? null : o.getName(), Ordering.natural().nullsLast())
             .result();
     }
 }

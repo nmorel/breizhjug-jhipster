@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <property name="now" value="now()" dbms="mysql,h2"/>
+    <property name="now" value="current_timestamp" dbms="postgresql"/>
+
+    <!--
+        Added the entity Event.
+    -->
+    <changeSet id="20141214092015" author="jhipster">
+        <createTable tableName="T_EVENT">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="place" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image" type="clob"/>
+            <column name="resume" type="varchar(2000)"/>
+        </createTable>
+
+        <addUniqueConstraint tableName="T_EVENT" columnNames="name, date, place" constraintName="unique_event"/>
+
+        <createTable tableName="T_EVENT_T_PERSON">
+            <column name="person_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="event_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="person_id"
+                                 baseTableName="T_EVENT_T_PERSON"
+                                 constraintName="fk_event_person_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_PERSON"/>
+        <addForeignKeyConstraint baseColumnNames="event_id"
+                                 baseTableName="T_EVENT_T_PERSON"
+                                 constraintName="fk_person_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_EVENT"/>
+
+        <createTable tableName="T_LINK">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addUniqueConstraint tableName="T_LINK" columnNames="type, url, name, event_id" constraintName="unique_link"/>
+
+        <addForeignKeyConstraint baseColumnNames="event_id"
+                                 baseTableName="T_LINK"
+                                 constraintName="fk_link_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="T_EVENT"/>
+
+    </changeSet>
+</databaseChangeLog>

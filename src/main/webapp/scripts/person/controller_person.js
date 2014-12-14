@@ -3,14 +3,14 @@
 breizhjugApp.controller('PersonController', function ($scope, resolvedPerson, Person) {
 
     $scope.persons = resolvedPerson;
-    $scope.types_address = ['GITHUB', 'TWITTER', 'MAIL'];
+    $scope.types_address = ['Github', 'Twitter', 'Mail'];
 
     $scope.addAddress = function (newAddress) {
         if (newAddress === undefined || newAddress.type === undefined || newAddress.value === undefined) {
             return;
         }
 
-        if ($scope.person.addresses === undefined) {
+        if ($scope.person.addresses === undefined || $scope.person.addresses === null) {
             $scope.person.addresses = [];
         }
         var address = {

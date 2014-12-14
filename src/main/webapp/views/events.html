@@ -1,0 +1,127 @@
+<div>
+
+    <h2>Events</h2>
+
+    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#saveEventModal" ng-click="clear()">
+        <span class="glyphicon glyphicon-flash"></span> Create a new Event
+    </button>
+    <div class="modal fade" id="saveEventModal" tabindex="-1" role="dialog" aria-labelledby="myEventLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form name="form" role="form" novalidate
+                      class="ng-scope ng-invalid ng-invalid-required ng-dirty ng-valid-minlength"
+                      ng-submit="create()">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                                ng-click="clear()">&times;</button>
+                        <h4 class="modal-title" id="myEventLabel">Create or edit a Event</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Name</label>
+                            <input type="text" class="form-control"
+                                   ng-model="event.name">
+                        </div>
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="datetime-local" class="form-control"
+                                   ng-model="event.date">
+                        </div>
+                        <div class="form-group">
+                            <label>Place</label>
+                            <input type="text" class="form-control"
+                                   ng-model="event.place">
+                        </div>
+                        <div class="form-group">
+                            <label>Image</label>
+                            <upload image="event.image" max-width='500' max-height='300'
+                                    default-image='images/default_event.png'></upload>
+                        </div>
+                        <div class="form-group">
+                            <label>Resume</label>
+                            <input type="text" class="form-control"
+                                   ng-model="event.resume">
+                        </div>
+                        <div class="form-group">
+                            <label>Speakers</label>
+
+                            <div>
+                                <select size="5" id="speakersSelec" multiple ng-multiple="true"
+                                        ng-model="event.speakers"
+                                        ng-options="s.name for s in speakers"></select>
+                            </div>
+                            <div ng-repeat="speaker in event.speakers">
+                                {{speaker.name}}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Links</label>
+
+                            <div>
+                                <input type="text" id="linkName" name="linkName" placeholder="Name"
+                                       ng-model="newLink.name">
+                                <select ng-model="newLink.type" ng-options="o.value as o.label for o in linkTypes">
+                                    <option></option>
+                                </select>
+                                <input type="text" id="linkUrl" name="linkUrl" placeholder="Url" ng-model="newLink.url">
+                                <div ng-click="addLink(newLink)" class="btn btn-primary">Add link</div>
+                                <p class="help-block" style="margin-top:10px" ng-repeat="link in event.links">
+                                    <span class="label label-info">
+                                        <i class="icon-{{ link.type }}">&nbsp;</i>
+                                        {{ link.name }} ({{ link.url }})
+                                        <a class="badge badge-important" ng-click="removeLink($index)">x</a>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+                            <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                        </button>
+                        <button type="submit" ng-disabled="form.$invalid" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-save"></span> Save
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Place</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="event in events">
+                <td>{{event.name}}</td>
+                <td>{{event.date}}</td>
+                <td>{{event.place}}</td>
+                <td>
+                    <button type="submit"
+                            ng-click="update(event.id)"
+                            class="btn btn-default">
+                        <span class="glyphicon glyphicon-pencil"></span> Edit
+                    </button>
+                    <button type="submit"
+                            ng-click="delete(event.id)"
+                            class="btn btn-danger">
+                        <span class="glyphicon glyphicon-remove-circle"></span> Delete
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

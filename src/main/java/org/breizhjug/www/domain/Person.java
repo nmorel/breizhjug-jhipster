@@ -1,13 +1,12 @@
 package org.breizhjug.www.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.annotations.*;
+import com.google.common.collect.ComparisonChain;
+import com.google.common.collect.Ordering;
 import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -20,7 +19,7 @@ import java.util.Set;
 @Entity
 @Table(name = "T_PERSON")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Person implements Serializable {
+public class Person implements Serializable, Comparable<Person> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -133,10 +132,16 @@ public class Person implements Serializable {
         return "Person{" +
             "id=" + id +
             ", name='" + name + "'" +
-            ", photo='" + photo + "'" +
             ", resume='" + resume + "'" +
             ", speaker='" + speaker + "'" +
             ", team_member='" + teamMember + "'" +
             '}';
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        return ComparisonChain.start()
+            .compare(name, o == null ? null : o.getName(), Ordering.natural().nullsLast())
+            .result();
     }
 }
