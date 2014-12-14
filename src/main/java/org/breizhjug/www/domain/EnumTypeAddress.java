@@ -5,6 +5,6 @@ package org.breizhjug.www.domain;
  */
 public enum EnumTypeAddress {
 
-    GITHUB, TWITTER, MAIL
+    Github, Twitter, Mail
 
 }
